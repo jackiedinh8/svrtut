@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <sys/shm.h>
 #include <time.h>
+#include <unistd.h>
 
 #include <event2/listener.h>
 #include <event2/bufferevent.h>
@@ -27,6 +28,7 @@ echo_read_cb(struct bufferevent *bev, void *ctx) {
 
    //printf("Receive message from client, len=%lu\n",recv_input_len);
    stats->msg_cnt++;
+   usleep(10);
 
    /* Copy all the data from the input buffer to the output buffer. */
    evbuffer_remove(input, data, recv_input_len); 

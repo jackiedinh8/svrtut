@@ -12,6 +12,7 @@
 
 void timeout_cb(evutil_socket_t fd, short what, void *ctx) {
    struct stats *stats = (struct stats*)ctx;
+   static int last_cnt = 0;
    time_t now;
 
    time(&now);
@@ -22,6 +23,8 @@ void timeout_cb(evutil_socket_t fd, short what, void *ctx) {
    printf("    conn_cnt: %u\n", stats->conn_cnt);
    printf("  start_time: %lu\n", stats->start_time);
    printf("   last_time: %lu\n", stats->last_time);
+   printf("       req/s: %u\n", stats->msg_cnt - last_cnt);
+   last_cnt = stats->msg_cnt;
    return;
 }
 
