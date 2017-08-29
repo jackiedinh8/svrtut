@@ -16,6 +16,8 @@
 #include "stats.h"
 #include "utils.h"
 
+static struct timespec process_time;
+
 typedef struct server_ctx server_ctx_t;
 struct server_ctx {
   shm_mq_t *mq_io_2_md;
@@ -77,7 +79,7 @@ handle_msg_from_io(int fd, short int event,void* data) {
     
      buf[len] = 0;
      ctx->stats->msg_cnt++;
-     usleep(10);
+     nanosleep(&process_time,0);
 
      //printf("Receive msg from io, msg=%s\n",buf);
      shmmq_enqueue(ctx->mq_md_2_io,0,buf,len,flowid);
@@ -127,6 +129,9 @@ main(int argc, char **argv) {
        EV_TIMEOUT|EV_READ|EV_PERSIST, handle_msg_from_io, ctx);
   event_add(ev, NULL);
  
+  process_time.tv_sec = 0;
+  process_time.tv_nsec = PROC_TIMEOUT;
+
   event_base_dispatch(base);
   return 0;
 }

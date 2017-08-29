@@ -7,6 +7,8 @@
 #define SHM_DEFAULT_OPEN_FLAG 0666
 #define CONNECTION_NUM 100*1024
 
+#define PROC_TIMEOUT 3
+
 char*
 create_shm(key_t key, int size, int flags);
 

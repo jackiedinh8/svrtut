@@ -15,6 +15,7 @@
 #include "stats.h"
 #include "utils.h"
 
+static struct timespec process_time;
 
 static void
 echo_read_cb(struct bufferevent *bev, void *ctx) {
@@ -28,7 +29,7 @@ echo_read_cb(struct bufferevent *bev, void *ctx) {
 
    //printf("Receive message from client, len=%lu\n",recv_input_len);
    stats->msg_cnt++;
-   usleep(10);
+   nanosleep(&process_time,0);
 
    /* Copy all the data from the input buffer to the output buffer. */
    evbuffer_remove(input, data, recv_input_len); 
@@ -112,6 +113,8 @@ main(int argc, char **argv) {
   }
   printf("Server listens on port %d\n",port);
   evconnlistener_set_error_cb(listener, accept_error_cb);
+  process_time.tv_sec = 0;
+  process_time.tv_nsec = PROC_TIMEOUT;
 
   event_base_dispatch(base);
   return 0;

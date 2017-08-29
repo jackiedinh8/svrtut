@@ -209,7 +209,6 @@ main(int argc, char **argv) {
   printf("Server listens on port %d\n",port);
   evconnlistener_set_error_cb(listener, accept_error_cb);
 
-  
   event_base_dispatch(base);
   return 0;
 }
